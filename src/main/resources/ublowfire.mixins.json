@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.ultimateboomer.ublowfire.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "InGameOverlayRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
