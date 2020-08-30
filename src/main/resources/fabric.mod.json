@@ -9,11 +9,11 @@
     "UltimateBoomer"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/UltimateBoomer",
+    "sources": "https://github.com/UltimateBoomer/low-fire-fabric"
   },
 
-  "license": "CC0-1.0",
+  "license": "GNU General Public License",
   "icon": "assets/ublowfire/icon.png",
 
   "environment": "*",
