@@ -16,7 +16,7 @@
   "license": "GNU General Public License",
   "icon": "assets/ublowfire/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "com.ultimateboomer.ublowfire.UBLowFireMod"

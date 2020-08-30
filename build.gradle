@@ -21,10 +21,10 @@ dependencies {
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
-	modApi "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
-	include "me.sargunvohra.mcmods:autoconfig1u:3.2.0-unstable"
+	modApi "me.sargunvohra.mcmods:autoconfig1u:3.2.2"
+	include "me.sargunvohra.mcmods:autoconfig1u:3.2.2"
 	
-	modImplementation "io.github.prospector:modmenu:1.14.5+build.30"
+	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
 }
 
 processResources {
