@@ -14,7 +14,7 @@ import net.minecraft.client.gui.hud.InGameOverlayRenderer;
 public class InGameOverlayRendererMixin {
 	@Inject(at = @At("HEAD"), method = "renderFireOverlay", cancellable = true)
 	private static void renderFireOverlay(CallbackInfo info) {
-		double fireOffset = UBLowFireMod.configHolder.getConfig().fireOffset;
+		double fireOffset = UBLowFireMod.config.fireOffset;
 				
 		RenderSystem.translated(0.0, -fireOffset, 0.0);
 	}
