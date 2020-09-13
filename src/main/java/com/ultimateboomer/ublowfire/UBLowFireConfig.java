@@ -5,5 +5,5 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 
 @Config(name = UBLowFireMod.MODID)
 public class UBLowFireConfig implements ConfigData {
-	public double fireOffset = 0.2;
+	public double fireOffset = 0.3;
 }
