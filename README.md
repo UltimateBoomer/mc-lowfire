@@ -1,3 +1,3 @@
-# low-fire-fabric
-Low Fire Mod for Fabric
+# Low Fire
+Low Fire Mod for Minecraft Fabric
 

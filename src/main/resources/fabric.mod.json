@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "ublowfire",
+  "id": "lowfire",
   "version": "${version}",
 
   "name": "Low Fire",
-  "description": "Reduce first-personed rendered fire height.",
+  "description": "Reduce first-person rendered fire height.",
   "authors": [
     "UltimateBoomer"
   ],
   "contact": {
     "homepage": "https://github.com/UltimateBoomer",
-    "sources": "https://github.com/UltimateBoomer/low-fire-fabric"
+    "sources": "https://github.com/UltimateBoomer/mc-lowfire"
   },
 
-  "license": "GNU General Public License",
-  "icon": "assets/ublowfire/icon.png",
+  "license": "MIT",
+  "icon": "assets/lowfire/icon.png",
 
   "environment": "client",
   "entrypoints": {
-    "main": [
-      "com.ultimateboomer.ublowfire.UBLowFireMod"
+    "client": [
+      "io.github.ultimateboomer.lowfire.LowFire"
     ],
 	"modmenu": [
-	  "com.ultimateboomer.ublowfire.UBLowFireModMenu"
+	  "io.github.ultimateboomer.lowfire.LowFireModMenu"
 	]
   },
   "mixins": [
-    "ublowfire.mixins.json"
+    "lowfire.mixins.json"
   ],
 
   "depends": {

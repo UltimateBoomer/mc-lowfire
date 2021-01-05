@@ -1,9 +1,9 @@
-package com.ultimateboomer.ublowfire;
+package io.github.ultimateboomer.lowfire;
 
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 
-@Config(name = UBLowFireMod.MODID)
-public class UBLowFireConfig implements ConfigData {
+@Config(name = LowFire.MODID)
+public class LowFireConfig implements ConfigData {
 	public double fireOffset = 0.3;
 }

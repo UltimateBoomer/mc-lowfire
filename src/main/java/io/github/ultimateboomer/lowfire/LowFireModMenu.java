@@ -1,4 +1,4 @@
-package com.ultimateboomer.ublowfire;
+package io.github.ultimateboomer.lowfire;
 
 import java.util.function.Function;
 
@@ -9,14 +9,14 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 
 @Environment(EnvType.CLIENT)
-public class UBLowFireModMenu implements ModMenuApi {
+public class LowFireModMenu implements ModMenuApi {
 	@Override
 	public String getModId() {
-		return UBLowFireMod.MODID;
+		return LowFire.MODID;
 	}
 	
 	@Override
 	public Function<Screen, ? extends Screen> getConfigScreenFactory() {
-		return parent -> AutoConfig.getConfigScreen(UBLowFireConfig.class, parent).get();
+		return parent -> AutoConfig.getConfigScreen(LowFireConfig.class, parent).get();
 	}
 }

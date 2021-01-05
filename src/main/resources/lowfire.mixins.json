@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.ultimateboomer.ublowfire.mixin",
+  "package": "io.github.ultimateboomer.lowfire.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
