@@ -1,4 +1,5 @@
 {
   "text.autoconfig.lowfire.title": "Low Fire Configuration",
-  "text.autoconfig.lowfire.option.fireOffset": "Fire Offset"
+  "text.autoconfig.lowfire.option.fireOffset": "Fire Offset",
+  "text.autoconfig.lowfire.option.fireOffset.@Tooltip": "Amount of offset (higher = lower fire)"
 }
