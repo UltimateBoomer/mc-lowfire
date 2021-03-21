@@ -1,5 +1,6 @@
 {
-  "text.autoconfig.lowfire.title": "Low Fire Configuration",
-  "text.autoconfig.lowfire.option.fireOffset": "Fire Offset",
-  "text.autoconfig.lowfire.option.fireOffset.@Tooltip": "Amount of offset (higher = lower fire)"
+  "key.categories.lowfire": "Low Fire",
+  "key.lowfire.nextFireOffset": "Change Fire Offset",
+
+  "lowfire.nextFireOffset": "Fire offset changed to %s"
 }
