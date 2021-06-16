@@ -23,7 +23,7 @@
       "io.github.ultimateboomer.lowfire.LowFire"
     ],
 	"modmenu": [
-	  "io.github.ultimateboomer.lowfire.LowFireModMenu"
+      "io.github.ultimateboomer.lowfire.compat.LowFireModMenu"
 	]
   },
   "mixins": [

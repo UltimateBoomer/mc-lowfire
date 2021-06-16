@@ -1,5 +1,6 @@
-package io.github.ultimateboomer.lowfire;
+package io.github.ultimateboomer.lowfire.screen;
 
+import io.github.ultimateboomer.lowfire.LowFire;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -20,7 +21,7 @@ public class LowFireMenuScreen extends Screen {
 
     private final NumberFormat numberFormat;
 
-    protected LowFireMenuScreen(Screen parent) {
+    public LowFireMenuScreen(Screen parent) {
         super(new TranslatableText("lowfire.menu"));
         this.parent = parent;
 

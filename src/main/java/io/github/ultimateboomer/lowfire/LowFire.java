@@ -1,5 +1,8 @@
 package io.github.ultimateboomer.lowfire;
 
+import io.github.ultimateboomer.lowfire.config.LowFireConfig;
+import io.github.ultimateboomer.lowfire.config.LowFireConfigHandler;
+import io.github.ultimateboomer.lowfire.screen.LowFireMenuScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
