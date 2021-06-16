@@ -2,5 +2,5 @@
   "key.categories.lowfire": "Low Fire",
   "key.lowfire.nextFireOffset": "Change Fire Offset",
 
-  "lowfire.nextFireOffset": "Fire offset changed to %s"
+  "lowfire.nextFireOffset": "Fire offset set to %s"
 }
