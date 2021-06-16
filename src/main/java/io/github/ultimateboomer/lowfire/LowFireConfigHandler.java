@@ -10,12 +10,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class ConfigHandler {
+public class LowFireConfigHandler {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public static LowFireConfig readConfig() {
-        String configPath = System.getProperty("user.dir") + "/config/" + LowFire.MOD_ID + ".json";
+    private final String configPath;
 
+    public LowFireConfigHandler(String configPath) {
+        this.configPath = configPath;
+    }
+
+    public LowFireConfig readConfig() {
         // Read config
         LowFireConfig config;
         try (FileReader reader = new FileReader(configPath)) {
@@ -34,7 +38,8 @@ public class ConfigHandler {
             config = new LowFireConfig();
             try (FileWriter writer = new FileWriter(configPath)) {
                 GSON.toJson(config, writer);
-                LowFire.LOGGER.debug("New config file created");
+
+                LowFire.LOGGER.info("New config file created");
             } catch (IOException e2) {
                 throw new IllegalStateException(e2);
             }
@@ -42,9 +47,17 @@ public class ConfigHandler {
         return config;
     }
 
-    public static void openConfigFile() {
-        String configPath = System.getProperty("user.dir") + "/config/" + LowFire.MOD_ID + ".json";
+    public void writeConfig(LowFireConfig config) {
+        try (FileWriter writer = new FileWriter(configPath)) {
+            GSON.toJson(config, writer);
 
+            LowFire.LOGGER.debug("Written to config");
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public void openConfigFile() {
         Util.getOperatingSystem().open(new File(configPath));
     }
 }

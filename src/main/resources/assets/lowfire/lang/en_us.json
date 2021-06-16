@@ -1,6 +1,10 @@
 {
   "key.categories.lowfire": "Low Fire",
+  "key.lowfire.openMenu": "Open Low Fire Menu",
   "key.lowfire.nextFireOffset": "Change Fire Offset",
+
+  "lowfire.menu": "Low Fire Menu",
+  "lowfire.menu.fireOffset": "Fire Offset",
 
   "lowfire.nextFireOffset": "Fire offset set to %s"
 }
