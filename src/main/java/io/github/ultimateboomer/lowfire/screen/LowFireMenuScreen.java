@@ -48,7 +48,7 @@ public class LowFireMenuScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || LowFire.INSTANCE.getLowFireMenuKey().matchesKey(keyCode, scanCode)) {
-            this.client.openScreen(parent);
+            this.client.setScreen(parent);
             LowFire.configHandler.writeConfig(LowFire.config);
             return true;
         } else {

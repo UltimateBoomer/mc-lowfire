@@ -53,7 +53,7 @@ public class LowFire implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (lowFireMenuKey.wasPressed()) {
-				client.openScreen(new LowFireMenuScreen(client.currentScreen));
+				client.setScreen(new LowFireMenuScreen(client.currentScreen));
 			}
 		});
 
