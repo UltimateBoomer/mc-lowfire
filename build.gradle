@@ -1,59 +1,77 @@
-plugins {
-	id 'fabric-loom' version '0.10-SNAPSHOT'
-	id 'maven-publish'
+buildscript {
+	repositories {
+		maven { url = 'https://maven.minecraftforge.net' }
+		jcenter()
+        mavenCentral()
+		maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
+        maven { url = 'https://maven.parchmentmc.org' }
+	}
+	
+	dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${forgegradle_version}", changing: true
+        classpath "org.spongepowered:mixingradle:${mixingradle_version}"
+        classpath "org.parchmentmc:librarian:${librarian_version}"
+    }
 }
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.mod_id + "-fabric"
+archivesBaseName = project.mod_id + "-forge"
 version = project.minecraft_version + "-" + project.mod_version
 group = project.maven_group
 
-repositories {
-	maven { url 'https://jitpack.io' }
-	maven { url "https://maven.terraformersmc.com" }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', ''
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.debug.export', 'true'
+
+            mods { lowfire { source sourceSets.main } }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods { lowfire { source sourceSets.main } }
+        }
+    }
+}
+
+mixin {
+       add sourceSets.main, "lowfire.refmap.json"
 }
 
 dependencies {
-	//to change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
-
-//	modRuntime "com.github.ultimateboomer:mc-smoothboot:${project.smoothboot_version}"
-}
-
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
-
-tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
-}
-
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
+    manifest {
+        attributes([
+                'Specification-Title'     : "${mod_id}",
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version,
+                'MixinConfigs'            : 'lowfire.mixins.json',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
+
+jar.finalizedBy('reobfJar')
 
 // configure the maven publication
 publishing {
@@ -61,13 +79,5 @@ publishing {
 		mavenJava(MavenPublication) {
 			from components.java
 		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }

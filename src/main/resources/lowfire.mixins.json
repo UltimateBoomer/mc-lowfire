@@ -1,8 +1,8 @@
 {
   "required": true,
-  "minVersion": "0.8",
-  "package": "io.github.ultimateboomer.lowfire.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8.4",
+  "package": "${project.maven_group}.lowfire.mixin",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
   "client": [
