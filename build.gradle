@@ -51,11 +51,15 @@ minecraft {
 }
 
 mixin {
-       add sourceSets.main, "lowfire.refmap.json"
+    add sourceSets.main, "lowfire.refmap.json"
+	config "lowfire.mixins.json"
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+	
+	compileOnly 'org.spongepowered:mixin:0.8.5'
+	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 jar {
