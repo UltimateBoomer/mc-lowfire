@@ -38,15 +38,6 @@ minecraft {
 
             mods { lowfire { source sourceSets.main } }
         }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods { lowfire { source sourceSets.main } }
-        }
     }
 }
 
@@ -58,7 +49,6 @@ mixin {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 	
-	compileOnly 'org.spongepowered:mixin:0.8.5'
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -75,7 +65,7 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
+// jar.finalizedBy('reobfJar')
 
 // configure the maven publication
 publishing {
