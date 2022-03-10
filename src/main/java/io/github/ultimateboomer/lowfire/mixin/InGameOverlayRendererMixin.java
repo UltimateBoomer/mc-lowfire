@@ -1,20 +1,22 @@
 package io.github.ultimateboomer.lowfire.mixin;
 
-import io.github.ultimateboomer.lowfire.LowFire;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.InGameOverlayRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameOverlayRenderer.class)
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import io.github.ultimateboomer.lowfire.config.LowFireConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ScreenEffectRenderer;
+
+@Mixin(ScreenEffectRenderer.class)
 public class InGameOverlayRendererMixin {
-	@Inject(method = "renderFireOverlay",
-			at =@At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"),
+	@Inject(method = "renderFire",
+			at =@At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V"),
 			cancellable = true)
-	private static void renderFireOverlay(MinecraftClient client, MatrixStack matrices, CallbackInfo ci) {
-		matrices.translate(0.0, -LowFire.config.fireOffset, 0.0);
+	private static void renderFireOverlay(Minecraft client, PoseStack matrices, CallbackInfo ci) {
+		matrices.translate(0.0, -LowFireConfig.client.fireOffset.get(), 0.0);
 	}
 }

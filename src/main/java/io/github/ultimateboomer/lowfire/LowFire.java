@@ -1,20 +1,31 @@
 package io.github.ultimateboomer.lowfire;
 
-import io.github.ultimateboomer.lowfire.config.LowFireConfig;
-import io.github.ultimateboomer.lowfire.config.LowFireConfigHandler;
-import io.github.ultimateboomer.lowfire.screen.LowFireMenuScreen;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.TranslatableText;
+import java.text.DecimalFormat;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.text.DecimalFormat;
+import com.mojang.blaze3d.platform.InputConstants;
 
-public class LowFire implements ClientModInitializer {
+import io.github.ultimateboomer.lowfire.config.LowFireConfig;
+import io.github.ultimateboomer.lowfire.screen.LowFireMenuScreen;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+@Mod(LowFire.MOD_ID)
+public class LowFire {
 	public static final String MOD_ID = "lowfire";
 	public static final String MOD_NAME = "Low Fire";
 
@@ -22,65 +33,53 @@ public class LowFire implements ClientModInitializer {
 
 	public static LowFire INSTANCE;
 
-	public static LowFireConfigHandler configHandler;
-	public static LowFireConfig config;
+	public LowFire() {
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInitializeClient);
+
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, LowFireConfig.spec);
+		MinecraftForge.EVENT_BUS.register(this);
+		INSTANCE = this;
+	}
 
 	private static final DecimalFormat df = new DecimalFormat("0.0");
 
-	private KeyBinding lowFireMenuKey;
-	private KeyBinding nextFireOffsetKey;
+	private KeyMapping lowFireMenuKey;
+	private KeyMapping nextFireOffsetKey;
 
-	@Override
-	public void onInitializeClient() {
-		INSTANCE = this;
-		configHandler = new LowFireConfigHandler(System.getProperty("user.dir")
-				+ "/config/" + LowFire.MOD_ID + ".json");
-		config = configHandler.readConfig();
+	private void onInitializeClient(final FMLClientSetupEvent event) {
+		lowFireMenuKey = new KeyMapping("key.lowfire.openMenu", InputConstants.UNKNOWN.getValue(), "key.categories.lowfire");
 
-		lowFireMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.lowfire.openMenu",
-				InputUtil.Type.KEYSYM,
-				-1,
-				"key.categories.lowfire"
-		));
-
-		nextFireOffsetKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.lowfire.nextFireOffset",
-				InputUtil.Type.KEYSYM,
-				-1,
-				"key.categories.lowfire"
-		));
-
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (lowFireMenuKey.wasPressed()) {
-				client.setScreen(new LowFireMenuScreen(client.currentScreen));
-			}
-		});
-
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (nextFireOffsetKey.wasPressed()) {
-				if (config.fireOffset >= 0.5) {
-					config.fireOffset = 0.0;
-				} else {
-					config.fireOffset = Math.floor(config.fireOffset * 10.0) / 10.0 + 0.1;
-				}
-
-				configHandler.writeConfig(config);
-
-				//noinspection ConstantConditions
-				client.player.sendMessage(
-						new TranslatableText("lowfire.nextFireOffset", df.format(config.fireOffset)),
-						true
-				);
-			}
+		nextFireOffsetKey = new KeyMapping("key.lowfire.nextFireOffset", InputConstants.UNKNOWN.getValue(), "key.categories.lowfire");
+		event.enqueueWork(() -> {
+			ClientRegistry.registerKeyBinding(lowFireMenuKey);
+			ClientRegistry.registerKeyBinding(nextFireOffsetKey);
 		});
 	}
 
-	public KeyBinding getLowFireMenuKey() {
+	public KeyMapping getLowFireMenuKey() {
 		return lowFireMenuKey;
 	}
 
-	public KeyBinding getNextFireOffsetKey() {
+	public KeyMapping getNextFireOffsetKey() {
 		return nextFireOffsetKey;
+	}
+
+	@EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
+	public class Events {
+		@SubscribeEvent
+		public static void clientTick(final ClientTickEvent event) {
+			if (LowFire.INSTANCE.lowFireMenuKey.consumeClick()) {
+				Minecraft.getInstance().setScreen(new LowFireMenuScreen(Minecraft.getInstance().screen));
+			}
+			if (LowFire.INSTANCE.nextFireOffsetKey.consumeClick()) {
+				if (LowFireConfig.client.fireOffset.get() >= 0.5) {
+					LowFireConfig.client.fireOffset.set(0d);
+				} else {
+					LowFireConfig.client.fireOffset.set(Math.floor(LowFireConfig.client.fireOffset.get() * 10.0) / 10.0 + 0.1);
+				}
+
+				Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent("lowfire.nextFireOffset", df.format(LowFireConfig.client.fireOffset.get())), true);
+			}
+		}
 	}
 }
