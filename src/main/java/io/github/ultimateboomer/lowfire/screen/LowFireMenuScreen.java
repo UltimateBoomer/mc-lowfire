@@ -16,7 +16,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class LowFireMenuScreen extends Screen {
     private final Screen parent;
 
@@ -55,7 +58,6 @@ public class LowFireMenuScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || LowFire.INSTANCE.getLowFireMenuKey().matches(keyCode, scanCode)) {
             this.minecraft.setScreen(parent);
-            LowFireConfig.client.fireOffset.save();
             return true;
         } else {
             return super.keyPressed(keyCode, scanCode, modifiers);
@@ -75,10 +77,9 @@ public class LowFireMenuScreen extends Screen {
         private static final double SLIDER_MAX = 0.5;
 
         public FireOffsetSliderWidget(int x, int y, int width, int height) {
-        	super(Minecraft.getInstance().options, x, y, width, height, 
-        			new ProgressOption("", 0, SLIDER_MAX,
-							(float)(LowFireConfig.client.fireOffset.get() / SLIDER_MAX),
-							option -> LowFireConfig.client.fireOffset.get(),
+        	super(Minecraft.getInstance().options, x, y, width, height,
+        			new ProgressOption("", 0, SLIDER_MAX, 0,
+							option -> { return LowFireConfig.client.fireOffset.get(); },
 							(option, doub) -> LowFireConfig.client.fireOffset.set(doub),
 							(option, prog) -> TextComponent.EMPTY),
         			List.of(FormattedCharSequence.EMPTY));
