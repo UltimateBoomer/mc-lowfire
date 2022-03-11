@@ -3,6 +3,7 @@
   "minVersion": "0.8.4",
   "package": "io.github.ultimateboomer.lowfire.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "lowfire.refmap.json",
   "mixins": [
   ],
   "client": [
