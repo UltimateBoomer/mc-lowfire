@@ -65,7 +65,7 @@ jar {
     }
 }
 
-// jar.finalizedBy('reobfJar')
+jar.finalizedBy('reobfJar')
 
 // configure the maven publication
 publishing {
