@@ -1,0 +1,13 @@
+modLoader="javafml" #mandatory
+loaderVersion="[39,)"
+license="MIT"
+[[mods]]
+modId="lowfire"
+version="${file.jarVersion}"
+displayName="Low Fire"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/low-fire"
+logoFile="icon.png"
+authors="UltimateBoomer"
+description='''
+Reduce first-person rendered fire height.
+'''

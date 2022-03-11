@@ -1,20 +1,29 @@
 package io.github.ultimateboomer.lowfire.screen;
 
-import io.github.ultimateboomer.lowfire.LowFire;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.SliderWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.system.MathUtil;
-
 import java.text.NumberFormat;
+import java.util.List;
 
+import org.lwjgl.glfw.GLFW;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import io.github.ultimateboomer.lowfire.LowFire;
+import io.github.ultimateboomer.lowfire.config.LowFireConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.ProgressOption;
+import net.minecraft.client.gui.components.SliderButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+@OnlyIn(Dist.CLIENT)
 public class LowFireMenuScreen extends Screen {
     private final Screen parent;
 
-    private SliderWidget offsetSlider;
+    private SliderButton offsetSlider;
 
     private final int sliderHeight = 20;
     private final int sliderWidth = 100;
@@ -22,7 +31,7 @@ public class LowFireMenuScreen extends Screen {
     private final NumberFormat numberFormat;
 
     public LowFireMenuScreen(Screen parent) {
-        super(new TranslatableText("lowfire.menu"));
+        super(new TranslatableComponent("lowfire.menu"));
         this.parent = parent;
 
         this.numberFormat = NumberFormat.getInstance();
@@ -37,7 +46,7 @@ public class LowFireMenuScreen extends Screen {
         this.offsetSlider = new FireOffsetSliderWidget((this.width - sliderWidth) / 2, this.height / 2,
                 sliderWidth, sliderHeight);
 
-        this.addDrawableChild(offsetSlider);
+        this.addRenderableWidget(offsetSlider);
     }
 
     @Override
@@ -47,9 +56,8 @@ public class LowFireMenuScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE || LowFire.INSTANCE.getLowFireMenuKey().matchesKey(keyCode, scanCode)) {
-            this.client.setScreen(parent);
-            LowFire.configHandler.writeConfig(LowFire.config);
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE || LowFire.INSTANCE.getLowFireMenuKey().matches(keyCode, scanCode)) {
+            this.minecraft.setScreen(parent);
             return true;
         } else {
             return super.keyPressed(keyCode, scanCode, modifiers);
@@ -57,32 +65,37 @@ public class LowFireMenuScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
 
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, this.height / 2 - 50, 0xFFFFFF);
+        drawCenteredString(matrices, minecraft.font, this.title, this.width / 2, this.height / 2 - 50, 0xFFFFFF);
 
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    class FireOffsetSliderWidget extends SliderWidget {
+    class FireOffsetSliderWidget extends SliderButton {
         private static final double SLIDER_MAX = 0.5;
 
         public FireOffsetSliderWidget(int x, int y, int width, int height) {
-            super(x, y, width, height, LiteralText.EMPTY, LowFire.config.fireOffset / SLIDER_MAX);
+        	super(Minecraft.getInstance().options, x, y, width, height,
+        			new ProgressOption("", 0, SLIDER_MAX, 0,
+							option -> { return LowFireConfig.client.fireOffset.get(); },
+							(option, doub) -> LowFireConfig.client.fireOffset.set(doub),
+							(option, prog) -> TextComponent.EMPTY),
+        			List.of(FormattedCharSequence.EMPTY));
             updateMessage();
         }
 
         @Override
         protected void updateMessage() {
-            this.setMessage(new TranslatableText("lowfire.menu.fireOffset")
+            this.setMessage(new TranslatableComponent("lowfire.menu.fireOffset")
                     .append(": " + numberFormat.format(value * SLIDER_MAX)));
         }
 
         @Override
         protected void applyValue() {
             LowFire.LOGGER.debug("Value applied");
-            LowFire.config.fireOffset = Math.round(value * SLIDER_MAX * 10.0) / 10.0;
+            LowFireConfig.client.fireOffset.set(Math.round(value * SLIDER_MAX * 10.0) / 10.0);
         }
     }
 }
