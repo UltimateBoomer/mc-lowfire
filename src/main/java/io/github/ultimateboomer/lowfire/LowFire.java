@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,7 +69,7 @@ public class LowFire implements ClientModInitializer {
 
 				//noinspection ConstantConditions
 				client.player.sendMessage(
-						new TranslatableText("lowfire.nextFireOffset", df.format(config.fireOffset)),
+						Text.translatable("lowfire.nextFireOffset", df.format(config.fireOffset)),
 						true
 				);
 			}

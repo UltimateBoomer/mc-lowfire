@@ -4,10 +4,8 @@ import io.github.ultimateboomer.lowfire.LowFire;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.system.MathUtil;
 
 import java.text.NumberFormat;
 
@@ -22,7 +20,7 @@ public class LowFireMenuScreen extends Screen {
     private final NumberFormat numberFormat;
 
     public LowFireMenuScreen(Screen parent) {
-        super(new TranslatableText("lowfire.menu"));
+        super(Text.translatable("lowfire.menu"));
         this.parent = parent;
 
         this.numberFormat = NumberFormat.getInstance();
@@ -69,13 +67,13 @@ public class LowFireMenuScreen extends Screen {
         private static final double SLIDER_MAX = 0.5;
 
         public FireOffsetSliderWidget(int x, int y, int width, int height) {
-            super(x, y, width, height, LiteralText.EMPTY, LowFire.config.fireOffset / SLIDER_MAX);
+            super(x, y, width, height, Text.empty(), LowFire.config.fireOffset / SLIDER_MAX);
             updateMessage();
         }
 
         @Override
         protected void updateMessage() {
-            this.setMessage(new TranslatableText("lowfire.menu.fireOffset")
+            this.setMessage(Text.translatable("lowfire.menu.fireOffset")
                     .append(": " + numberFormat.format(value * SLIDER_MAX)));
         }
 
