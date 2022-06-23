@@ -28,7 +28,8 @@ public class LowFire implements ClientModInitializer {
 
 	private static final DecimalFormat df = new DecimalFormat("0.0");
 
-	private KeyBinding lowFireToggleKey;
+	private KeyBinding toggleKey;
+	private KeyBinding toggleRenderKey;
 	private KeyBinding nextFireOffsetKey;
 
 	@Override
@@ -38,8 +39,15 @@ public class LowFire implements ClientModInitializer {
 		configHolder = AutoConfig.register(LowFireConfig.class, GsonConfigSerializer::new);
 		config = configHolder.getConfig();
 
-		lowFireToggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+		toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"key.lowfire.toggle",
+				InputUtil.Type.KEYSYM,
+				-1,
+				"key.categories.lowfire"
+		));
+
+		toggleRenderKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"key.lowfire.toggleRender",
 				InputUtil.Type.KEYSYM,
 				-1,
 				"key.categories.lowfire"
@@ -53,9 +61,30 @@ public class LowFire implements ClientModInitializer {
 		));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (lowFireToggleKey.wasPressed()) {
+			while (toggleKey.wasPressed()) {
 				config.enabled ^= true;
 				configHolder.save();
+
+				if (client.player != null) {
+					client.player.sendMessage(
+							Text.translatable(config.enabled ? "lowfire.toggle.enabled" : "lowfire.toggle.disabled"),
+							true
+					);
+				}
+			}
+		});
+
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (toggleRenderKey.wasPressed()) {
+				config.renderFire ^= true;
+				configHolder.save();
+
+				if (client.player != null) {
+					client.player.sendMessage(
+							Text.translatable(config.renderFire ? "lowfire.toggleRender.enabled" : "lowfire.toggleRender.disabled"),
+							true
+					);
+				}
 			}
 		});
 
@@ -68,15 +97,15 @@ public class LowFire implements ClientModInitializer {
 					config.fireOffset = Math.floor(config.fireOffset * 10) / 10;
 				}
 
-
 				configHolder.save();
 
-				//noinspection ConstantConditions
-				client.player.sendMessage(
-						Text.translatable("lowfire.nextFireOffset", df.format(config.fireOffset)
-								.replaceAll("^-(?=0(\\.0*)?$)", "")),
-						true
-				);
+				if (client.player != null) {
+					client.player.sendMessage(
+							Text.translatable("lowfire.nextFireOffset", df.format(config.fireOffset)
+									.replaceAll("^-(?=0(\\.0*)?$)", "")),
+							true
+					);
+				}
 			}
 		});
 	}
