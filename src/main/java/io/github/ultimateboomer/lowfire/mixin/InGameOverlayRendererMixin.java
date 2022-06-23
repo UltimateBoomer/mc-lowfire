@@ -15,6 +15,9 @@ public class InGameOverlayRendererMixin {
 			at =@At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V"),
 			cancellable = true)
 	private static void renderFireOverlay(MinecraftClient client, MatrixStack matrices, CallbackInfo ci) {
-		matrices.translate(0.0, -LowFire.config.fireOffset, 0.0);
+		if (!LowFire.INSTANCE.config.enabled)
+			return;
+
+		matrices.translate(0.0, -LowFire.INSTANCE.config.fireOffset, 0.0);
 	}
 }

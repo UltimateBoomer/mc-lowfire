@@ -2,7 +2,8 @@ package io.github.ultimateboomer.lowfire.compat;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import io.github.ultimateboomer.lowfire.screen.LowFireMenuScreen;
+import io.github.ultimateboomer.lowfire.config.LowFireConfig;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -10,6 +11,6 @@ import net.fabricmc.api.Environment;
 public class LowFireModMenu implements ModMenuApi {
 	@Override
 	public ConfigScreenFactory<?> getModConfigScreenFactory() {
-		return LowFireMenuScreen::new;
+		return parent -> AutoConfig.getConfigScreen(LowFireConfig.class, parent).get();
 	}
 }

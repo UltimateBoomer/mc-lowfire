@@ -1,8 +1,9 @@
 package io.github.ultimateboomer.lowfire;
 
 import io.github.ultimateboomer.lowfire.config.LowFireConfig;
-import io.github.ultimateboomer.lowfire.config.LowFireConfigHandler;
-import io.github.ultimateboomer.lowfire.screen.LowFireMenuScreen;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -22,23 +23,23 @@ public class LowFire implements ClientModInitializer {
 
 	public static LowFire INSTANCE;
 
-	public static LowFireConfigHandler configHandler;
-	public static LowFireConfig config;
+	public LowFireConfig config;
+	public ConfigHolder<LowFireConfig> configHolder;
 
 	private static final DecimalFormat df = new DecimalFormat("0.0");
 
-	private KeyBinding lowFireMenuKey;
+	private KeyBinding lowFireToggleKey;
 	private KeyBinding nextFireOffsetKey;
 
 	@Override
 	public void onInitializeClient() {
 		INSTANCE = this;
-		configHandler = new LowFireConfigHandler(System.getProperty("user.dir")
-				+ "/config/" + LowFire.MOD_ID + ".json");
-		config = configHandler.readConfig();
 
-		lowFireMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.lowfire.openMenu",
+		configHolder = AutoConfig.register(LowFireConfig.class, GsonConfigSerializer::new);
+		config = configHolder.getConfig();
+
+		lowFireToggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"key.lowfire.toggle",
 				InputUtil.Type.KEYSYM,
 				-1,
 				"key.categories.lowfire"
@@ -52,8 +53,9 @@ public class LowFire implements ClientModInitializer {
 		));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (lowFireMenuKey.wasPressed()) {
-				client.setScreen(new LowFireMenuScreen(client.currentScreen));
+			while (lowFireToggleKey.wasPressed()) {
+				config.enabled ^= true;
+				configHolder.save();
 			}
 		});
 
@@ -65,7 +67,7 @@ public class LowFire implements ClientModInitializer {
 					config.fireOffset = Math.floor(config.fireOffset * 10.0) / 10.0 + 0.1;
 				}
 
-				configHandler.writeConfig(config);
+				configHolder.save();
 
 				//noinspection ConstantConditions
 				client.player.sendMessage(
@@ -74,13 +76,5 @@ public class LowFire implements ClientModInitializer {
 				);
 			}
 		});
-	}
-
-	public KeyBinding getLowFireMenuKey() {
-		return lowFireMenuKey;
-	}
-
-	public KeyBinding getNextFireOffsetKey() {
-		return nextFireOffsetKey;
 	}
 }
