@@ -61,17 +61,20 @@ public class LowFire implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (nextFireOffsetKey.wasPressed()) {
-				if (config.fireOffset >= 0.5) {
+				if (config.fireOffset >= 0.5 || config.fireOffset < 0.0) {
 					config.fireOffset = 0.0;
 				} else {
-					config.fireOffset = Math.floor(config.fireOffset * 10.0) / 10.0 + 0.1;
+					config.fireOffset += 0.1;
+					config.fireOffset = Math.floor(config.fireOffset * 10) / 10;
 				}
+
 
 				configHolder.save();
 
 				//noinspection ConstantConditions
 				client.player.sendMessage(
-						Text.translatable("lowfire.nextFireOffset", df.format(config.fireOffset)),
+						Text.translatable("lowfire.nextFireOffset", df.format(config.fireOffset)
+								.replaceAll("^-(?=0(\\.0*)?$)", "")),
 						true
 				);
 			}
