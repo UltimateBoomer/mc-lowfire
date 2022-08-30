@@ -5,8 +5,8 @@
   "key.lowfire.nextFireOffset": "更改火偏置",
 
   "text.autoconfig.lowfire.title": "低火菜单",
-  "text.autoconfig.lowfire.option.enabled": "启用低火功能",
-  "text.autoconfig.lowfire.option.renderFire": "渲染火焰",
+  "text.autoconfig.lowfire.option.enabled": "启用低火",
+  "text.autoconfig.lowfire.option.renderFire": "火焰渲染",
   "text.autoconfig.lowfire.option.fireOffset": "火偏置",
 
   "lowfire.toggle.enabled": "低火已启用",
