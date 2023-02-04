@@ -1,0 +1,17 @@
+{
+  "key.categories.lowfire": "低火",
+  "key.lowfire.toggle": "切换低火",
+  "key.lowfire.toggleRender": "切换火渲染",
+  "key.lowfire.nextFireOffset": "更改火偏置",
+
+  "text.autoconfig.lowfire.title": "低火菜单",
+  "text.autoconfig.lowfire.option.enabled": "启用低火",
+  "text.autoconfig.lowfire.option.renderFire": "火渲染",
+  "text.autoconfig.lowfire.option.fireOffset": "火偏置",
+
+  "lowfire.toggle.enabled": "低火已启用",
+  "lowfire.toggle.disabled": "低火已禁止",
+  "lowfire.toggleRender.enabled": "火渲染已启用",
+  "lowfire.toggleRender.disabled": "火渲染已禁止",
+  "lowfire.nextFireOffset": "设置火偏置为%s"
+}
